@@ -24,18 +24,28 @@ def generate_summary(text: str, max_length: int = 100) -> str:
     prompt = f"Summarize this document :\n\n{text}\n"
     print(prompt)
 
-    completion = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {
-            "role": "user",
-            "content": prompt,
-        }
-    ],
-    )
+    print(f">>>>generate_summary::openai.api_key::{openai.api_key}")
+    print(">>>>generate_summary::openai.ChatCompletion.create")
 
-    summary = completion.choices[0].message["content"]
-    return summary
+    try:
+        completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        )
+
+        print(">>>>generate_summary::summary")
+        summary = completion.choices[0].message["content"]
+        print(f">>>>generate_summary::{completion.choices[0].message['content']}")
+        return summary
+    except Exception as inst:
+        print(">>>>generate_summary::error")
+        print(inst)
+        return ""
 
 def summarize_large_text(conversations: Conversations,
                          text: str,
